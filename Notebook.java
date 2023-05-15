@@ -1,8 +1,11 @@
+import java.nio.file.FileAlreadyExistsException;
 import java.util.*;
+import java.io.File;
 
 public class Notebook {
     private String userName;
     private String fileName;
+    private String folderName;
     private String noteTitle;
     private String currDate;
     private String currTime;
@@ -23,46 +26,65 @@ public class Notebook {
     }
 
     // handles the main function loop for input
-    // calls userInputValidation which is used to handle input validation
+    // handle input validation
     public void menuLoop(Scanner scnr) {
         String userInput;
         while (true) {
             displayOptions();
             userInput = scnr.nextLine();
-            userInputValidation(userInput);
+
+            if (userInput.equals("1")) {
+                getUserName(scnr);
+            }
+            else if (userInput.equals("2")) {
+                createNewFolder(scnr);
+
+            }
+            else if (userInput.equals("3")) {
+                System.out.println("Create a new file");
+
+            }
+            else if (userInput.equals("4")) {
+                System.out.println("Open a folder/ file");
+
+            }
+            else if (userInput.equals("5")) {
+                System.out.println("Delete a folder/ file");
+
+            }
+            else if (userInput.equals("6")) {
+                System.out.println("Show list of folders/ files");
+            }
+            else if (userInput.equals("7")) {
+                System.out.println("Exit");
+            }
+            else {
+                System.out.println("Please choose menu option");
+            }
         }
     }
 
-    //handles userInput for menu option
-    private void userInputValidation(String userInput) {
-        if (userInput.equals("1")) {
-            System.out.println("Please Enter Your Name");
+    private void getUserName(Scanner scnr)  {
+        System.out.println("Enter your name");
+        userName = scnr.nextLine();
+    }
 
-        }
-        else if (userInput.equals("2")) {
-            System.out.println("Create a new folder");
-
-        }
-        else if (userInput.equals("3")) {
-            System.out.println("Create a new file");
-
-        }
-        else if (userInput.equals("4")) {
-            System.out.println("Open a folder/ file");
-
-        }
-        else if (userInput.equals("5")) {
-            System.out.println("Delete a folder/ file");
-
-        }
-        else if (userInput.equals("6")) {
-            System.out.println("Show list of folders/ files");
-        }
-        else if (userInput.equals("7")) {
-            System.out.println("Exit");
-        }
-        else {
-           System.out.println("Please choose menu option");
-        }
+    // Creates folder & throws exception and prompts for user input if folder already exists
+    private void createNewFolder(Scanner scnr) {
+        System.out.println("Enter file name");
+        do {
+            try {
+                folderName = scnr.next();
+                File newFolder = new File(folderName);
+                if (newFolder.mkdir()) {
+                    System.out.println("Folder '" +  folderName + "' creation successful");
+                } else {
+                    throw new FileAlreadyExistsException("File creation error, try again");
+                }
+            } catch (FileAlreadyExistsException e) {
+                System.out.println(e);
+            }
+        }while(true);
     }
 }
+
