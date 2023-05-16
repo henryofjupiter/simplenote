@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.*;
 import java.io.File;
@@ -5,10 +6,13 @@ import java.io.File;
 public class Notebook {
     private String userName;
     private String fileName;
+    private String chosenFolder;
     private String folderName;
+    private String filePath;
     private String noteTitle;
     private String currDate;
     private String currTime;
+    private final HashMap<String, String> folderNames = new HashMap<String, String>();
 
 
     // displays menu option to user
@@ -29,9 +33,10 @@ public class Notebook {
     // handle input validation
     public void menuLoop(Scanner scnr) {
         String userInput;
+
         while (true) {
             displayOptions();
-            userInput = scnr.nextLine();
+            userInput = scnr.next();
 
             if (userInput.equals("1")) {
                 getUserName(scnr);
@@ -41,7 +46,7 @@ public class Notebook {
 
             }
             else if (userInput.equals("3")) {
-                System.out.println("Create a new file");
+                createNewFile(scnr);
 
             }
             else if (userInput.equals("4")) {
@@ -57,11 +62,13 @@ public class Notebook {
             }
             else if (userInput.equals("7")) {
                 System.out.println("Exit");
+                break;
             }
             else {
                 System.out.println("Please choose menu option");
             }
         }
+
     }
 
     private void getUserName(Scanner scnr)  {
@@ -69,22 +76,71 @@ public class Notebook {
         userName = scnr.nextLine();
     }
 
-    // Creates folder & throws exception and prompts for user input if folder already exists
+    // Creates new folder
     private void createNewFolder(Scanner scnr) {
-        System.out.println("Enter file name");
+        System.out.println("Enter name of folder");
         do {
             try {
                 folderName = scnr.next();
                 File newFolder = new File(folderName);
+                filePath = newFolder.getAbsolutePath();
                 if (newFolder.mkdir()) {
                     System.out.println("Folder '" +  folderName + "' creation successful");
+                    folderNames.put(filePath, folderName);
+                    scnr.nextLine();
+                    break;
                 } else {
-                    throw new FileAlreadyExistsException("File creation error, try again");
+                    throw new FileAlreadyExistsException("Folder already exits, try a new name");
                 }
             } catch (FileAlreadyExistsException e) {
                 System.out.println(e);
             }
         }while(true);
     }
-}
 
+    // Creates a new file with extension .txt in a chosen folder
+    // adds newly created folder to hashmap with folder path as key
+    private void createNewFile(Scanner scnr) {
+        scnr.nextLine();
+        do {
+            System.out.println("Please choose a folder to store your file");
+            for (String i : folderNames.values()) {
+                System.out.println(i);
+            }
+            chosenFolder = scnr.nextLine();
+            System.out.println();
+
+            for (String i : folderNames.keySet()) {
+
+                if (folderNames.get(i).equals(chosenFolder)) {
+                    filePath = i;
+                }
+                else {
+                    System.out.println("Folder not on file");
+                    chosenFolder = " ";
+                    break;
+                }
+            }
+            try {
+                if (!(chosenFolder.equals(" "))) {
+                    System.out.println("Enter name of file");
+                    System.out.println("file path " + filePath);
+                    fileName = scnr.next();
+                    fileName = filePath + File.separator + fileName + ".txt";
+                    System.out.println("--> " + fileName);
+                    File newFile = new File(fileName);
+
+                    if(newFile.createNewFile()) {
+                        System.out.println("File creation successful");
+                        break;
+                    }
+                    else if (newFile.exists()) {
+                        System.out.println("File Exists");
+                    }
+                }
+            } catch (IOException r) {
+                System.out.println(r.getMessage());
+            }
+        }while(true);
+    }
+}
