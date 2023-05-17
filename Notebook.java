@@ -1,5 +1,8 @@
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.io.File;
 
@@ -10,7 +13,7 @@ public class Notebook {
     private String folderName;
     private String filePath;
     private String noteTitle;
-    private String currDate;
+    private String currDate; //TODO: IMPLEMENT DATE FROM JAVA LIBRARY
     private String currTime;
     private final HashMap<String, String> folderNames = new HashMap<String, String>();
 
@@ -50,8 +53,7 @@ public class Notebook {
 
             }
             else if (userInput.equals("4")) {
-                System.out.println("Open a folder/ file");
-
+                //TODO: work on opening folder or files
             }
             else if (userInput.equals("5")) {
                 System.out.println("Delete a folder/ file");
@@ -77,6 +79,7 @@ public class Notebook {
     }
 
     // Creates new folder
+    // adds newly created folder to hashmap along with the folder's path as key
     private void createNewFolder(Scanner scnr) {
         System.out.println("Enter name of folder");
         do {
@@ -99,7 +102,6 @@ public class Notebook {
     }
 
     // Creates a new file with extension .txt in a chosen folder
-    // adds newly created folder to hashmap with folder path as key
     private void createNewFile(Scanner scnr) {
         scnr.nextLine();
         do {
@@ -142,5 +144,12 @@ public class Notebook {
                 System.out.println(r.getMessage());
             }
         }while(true);
+    }
+    //fetches current date from library
+
+    private void currentDate() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        currDate = dtf.format(now);
     }
 }
