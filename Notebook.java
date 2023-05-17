@@ -1,10 +1,10 @@
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.io.File;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class Notebook {
     private String userName;
@@ -101,14 +101,18 @@ public class Notebook {
         }while(true);
     }
 
+    private void folderNamesList () {
+        for (String i : folderNames.values()) {
+            System.out.println(i);
+        }
+    }
+
     // Creates a new file with extension .txt in a chosen folder
     private void createNewFile(Scanner scnr) {
         scnr.nextLine();
         do {
             System.out.println("Please choose a folder to store your file");
-            for (String i : folderNames.values()) {
-                System.out.println(i);
-            }
+            folderNamesList();
             chosenFolder = scnr.nextLine();
             System.out.println();
 
@@ -146,10 +150,24 @@ public class Notebook {
         }while(true);
     }
     //fetches current date from library
-
     private void currentDate() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDateTime now = LocalDateTime.now();
         currDate = dtf.format(now);
+    }
+    private void openFolderFile (Scanner scnr) {
+        System.out.println("Choose from the menu option below");
+        System.out.println("1. Open a folder");
+        System.out.println("2. Open a file");
+
+        String userInput = scnr.next();
+
+        if (userInput.equals("1")) {
+            folderNamesList();
+            System.out.println("Choose a folder to open");
+        }
+        else if (userInput.equals("2")) {
+            //TODO: IMPLEMENT A FOLDER THAT READS FILES FROM A SELECTED FOLDER
+        }
     }
 }
