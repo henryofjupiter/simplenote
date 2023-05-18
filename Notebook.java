@@ -85,9 +85,9 @@ public class Notebook {
         do {
             try {
                 folderName = scnr.next();
-                File newFolder = new File(folderName);
+                File newFolder = new File("myNotebook" + File.separator + folderName);
                 filePath = newFolder.getAbsolutePath();
-                if (newFolder.mkdir()) {
+                if (newFolder.mkdirs()) {
                     System.out.println("Folder '" +  folderName + "' creation successful");
                     folderNames.put(filePath, folderName);
                     scnr.nextLine();
@@ -155,6 +155,8 @@ public class Notebook {
         LocalDateTime now = LocalDateTime.now();
         currDate = dtf.format(now);
     }
+
+    //open folders or file
     private void openFolderFile (Scanner scnr) {
         System.out.println("Choose from the menu option below");
         System.out.println("1. Open a folder");
