@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -16,7 +17,6 @@ public class Notebook {
     private String currDate; //TODO: IMPLEMENT DATE FROM JAVA LIBRARY
     private String currTime;
     private final HashMap<String, String> folderNames = new HashMap<String, String>();
-
 
     // displays menu option to user
     private void displayOptions() {
@@ -85,8 +85,9 @@ public class Notebook {
         do {
             try {
                 folderName = scnr.next();
-                File newFolder = new File("myNotebook" + File.separator + folderName);
+                newFolder = new File("myNotebook" + File.separator + folderName);
                 filePath = newFolder.getAbsolutePath();
+
                 if (newFolder.mkdirs()) {
                     System.out.println("Folder '" +  folderName + "' creation successful");
                     folderNames.put(filePath, folderName);
@@ -104,6 +105,12 @@ public class Notebook {
     private void folderNamesList () {
         for (String i : folderNames.values()) {
             System.out.println(i);
+        }
+        //testing to return list of folders
+        testing = newFolder.list();
+
+        for (String testing : testing) {
+            System.out.println(testing);
         }
     }
 
