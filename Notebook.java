@@ -8,16 +8,19 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Notebook {
-    private String userName;
-    private String fileName;
-    private String chosenFolder;
-    private String folderName;
-    private String filePath;
+    protected String userName;
+    protected String fileName;
+    protected String chosenFolder;
+    protected String folderName;
+    protected String filePath;
     private String noteTitle;
-    private String currDate; //TODO: IMPLEMENT DATE FROM JAVA LIBRARY
+    protected String currDate; //TODO: IMPLEMENT DATE FROM JAVA LIBRARY
     private String currTime;
-    private final HashMap<String, String> folderNames = new HashMap<String, String>();
+    protected final HashMap<String, String> folderNames = new HashMap<String, String>();
+    protected String[] listOfFolders;
+    public Notebook() {
 
+    }
     // displays menu option to user
     private void displayOptions() {
         System.out.println("Notebook Action Options");
@@ -35,6 +38,9 @@ public class Notebook {
     // handles the main function loop for input
     // handle input validation
     public void menuLoop(Scanner scnr) {
+        userInput user = new userInput();
+        FolderFileManager folderFile = new FolderFileManager();
+
         String userInput;
 
         while (true) {
@@ -42,18 +48,19 @@ public class Notebook {
             userInput = scnr.next();
 
             if (userInput.equals("1")) {
-                getUserName(scnr);
+                user.getUserName(scnr);
             }
             else if (userInput.equals("2")) {
-                createNewFolder(scnr);
+                folderFile.createNewFolder(scnr);
 
             }
             else if (userInput.equals("3")) {
-                createNewFile(scnr);
+                folderFile.createNewFile(scnr);
 
             }
             else if (userInput.equals("4")) {
                 //TODO: work on opening folder or files
+                folderFile.openFolderFile(scnr);
             }
             else if (userInput.equals("5")) {
                 System.out.println("Delete a folder/ file");
@@ -73,110 +80,7 @@ public class Notebook {
 
     }
 
-    private void getUserName(Scanner scnr)  {
-        System.out.println("Enter your name");
-        userName = scnr.nextLine();
-    }
-
-    // Creates new folder
+        // Creates new folder
     // adds newly created folder to hashmap along with the folder's path as key
-    private void createNewFolder(Scanner scnr) {
-        System.out.println("Enter name of folder");
-        do {
-            try {
-                folderName = scnr.next();
-                newFolder = new File("myNotebook" + File.separator + folderName);
-                filePath = newFolder.getAbsolutePath();
 
-                if (newFolder.mkdirs()) {
-                    System.out.println("Folder '" +  folderName + "' creation successful");
-                    folderNames.put(filePath, folderName);
-                    scnr.nextLine();
-                    break;
-                } else {
-                    throw new FileAlreadyExistsException("Folder already exits, try a new name");
-                }
-            } catch (FileAlreadyExistsException e) {
-                System.out.println(e);
-            }
-        }while(true);
-    }
-
-    private void folderNamesList () {
-        for (String i : folderNames.values()) {
-            System.out.println(i);
-        }
-        //testing to return list of folders
-        testing = newFolder.list();
-
-        for (String testing : testing) {
-            System.out.println(testing);
-        }
-    }
-
-    // Creates a new file with extension .txt in a chosen folder
-    private void createNewFile(Scanner scnr) {
-        scnr.nextLine();
-        do {
-            System.out.println("Please choose a folder to store your file");
-            folderNamesList();
-            chosenFolder = scnr.nextLine();
-            System.out.println();
-
-            for (String i : folderNames.keySet()) {
-
-                if (folderNames.get(i).equals(chosenFolder)) {
-                    filePath = i;
-                }
-                else {
-                    System.out.println("Folder not on file");
-                    chosenFolder = " ";
-                    break;
-                }
-            }
-            try {
-                if (!(chosenFolder.equals(" "))) {
-                    System.out.println("Enter name of file");
-                    System.out.println("file path " + filePath);
-                    fileName = scnr.next();
-                    fileName = filePath + File.separator + fileName + ".txt";
-                    System.out.println("--> " + fileName);
-                    File newFile = new File(fileName);
-
-                    if(newFile.createNewFile()) {
-                        System.out.println("File creation successful");
-                        break;
-                    }
-                    else if (newFile.exists()) {
-                        System.out.println("File Exists");
-                    }
-                }
-            } catch (IOException r) {
-                System.out.println(r.getMessage());
-            }
-        }while(true);
-    }
-    //fetches current date from library
-    private void currentDate() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDateTime now = LocalDateTime.now();
-        currDate = dtf.format(now);
-    }
-
-    //open folders or file
-    private void openFolderFile (Scanner scnr) {
-        System.out.println("Choose from the menu option below");
-        System.out.println("1. Open a folder");
-        System.out.println("2. Open a file");
-
-        String userInput = scnr.next();
-
-        if (userInput.equals("1")) {
-            folderNamesList();
-            System.out.println("Choose a folder to open");
-        }
-        else if (userInput.equals("2")) {
-            //TODO: IMPLEMENT A FOLDER THAT READS FILES FROM A SELECTED FOLDER
-        }
-    }
 }
