@@ -80,7 +80,5 @@ public class Notebook {
 
     }
 
-        // Creates new folder
-    // adds newly created folder to hashmap along with the folder's path as key
 
 }

@@ -9,6 +9,9 @@ public class FolderFileManager extends Notebook {
     FolderFileManager() {
 
     }
+
+    // Creates new folder
+    // adds newly created folder to hashmap along with the folder's path as key
     public void createNewFolder(Scanner scnr) {
         System.out.println("Enter name of folder");
         do {
@@ -85,6 +88,8 @@ public class FolderFileManager extends Notebook {
         }while(true);
     }
     //fetches current date from library
+
+    // retrieves current date from java library
     public void currentDate() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDateTime now = LocalDateTime.now();
